@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matemática Divertida - 5º Ano 🚀</title>
+    <!-- Fontes amigáveis e divertidas do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           VARIÁVEIS DE CORES E TEMAS VIBRANTES
+           ========================================================================== */
+        :root {
+            --bg-main: #F0F9FF;
+            --card-bg: #FFFFFF;
+            --text-dark: #1E293B;
+            --text-muted: #475569;
+
+            /* Paleta Principal */
+            --c-blue: #00BBF9;
+            --c-blue-dark: #0096C7;
+            --c-yellow: #FEE440;
+            --c-yellow-dark: #EAB308;
+            --c-orange: #FF6B35;
+            --c-orange-dark: #D94E1F;
+            --c-green: #00F5D4;
+            --c-green-solid: #10B981;
+            --c-green-dark: #059669;
+            --c-purple: #9B5DE5;
+            --c-purple-dark: #7C3AED;
+            --c-pink: #F15BB5;
+            --c-red: #EF4444;
+            --c-red-dark: #DC2626;
+
+            /* Tema Dinâmico Atual (Muda conforme o desafio) */
+            --theme-primary: #00BBF9;
+            --theme-shadow: #0096C7;
+            --theme-light: #E0F7FF;
+        }
+
+        /* ==========================================================================
+           RESET E ESTILOS GLOBAIS
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-main);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 187, 249, 0.12) 0%, transparent 25%),
+                radial-gradient(circle at 90% 15%, rgba(254, 228, 64, 0.18) 0%, transparent 25%),
+                radial-gradient(circle at 80% 85%, rgba(155, 93, 229, 0.12) 0%, transparent 25%),
+                radial-gradient(circle at 15% 80%, rgba(0, 245, 212, 0.15) 0%, transparent 25%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .font-display {
+            font-family: 'Fredoka', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        /* Canvas de Partículas / Efeitos Visuais em Tela Cheia */
+        #effects-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ==========================================================================
+           CABEÇALHO E BARRA DE PROGRESSO GAMIFICADA
+           ========================================================================== */
+        header {
+            background: #FFFFFF;
+            box-shadow: 0 6px 20px rgba(30, 41, 59, 0.08);
+            padding: 12px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 4px solid var(--theme-primary);
+            transition: border-color 0.4s ease;
+        }
+
+        .header-container {
+            max-width: 1024px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, var(--c-blue), var(--c-purple));
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 0 var(--c-purple-dark);
+            transition: transform 0.2s;
+        }
+
+        .logo-area:hover .logo-badge {
+            transform: rotate(-8deg) scale(1.08);
+        }
+
+        .logo-text h1 {
+            font-size: 1.35rem;
+            color: var(--text-dark);
+            line-height: 1.1;
+        }
+
+        .logo-text span {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--c-orange);
+            text-transform: uppercase;
+        }
+
+        .hud-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stars-counter {
+            background: #FFFBEB;
+            border: 3px solid var(--c-yellow);
+            border-radius: 50px;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.15rem;
+            color: #B45309;
+            box-shadow: 0 3px 0 #FDE047;
+        }
+
+        .star-icon {
+            font-size: 1.3rem;
+            display: inline-block;
+            animation: pulseStar 2s infinite;
+        }
+
+        @keyframes pulseStar {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2) rotate(10deg); }
+        }
+
+        .sound-btn {
+            background: #F1F5F9;
+            border: 2px solid #CBD5E1;
+            border-radius: 14px;
+            width: 42px;
+            height: 42px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 3px 0 #CBD5E1;
+        }
+
+        .sound-btn:active {
+            transform: translateY(3px);
+            box-shadow: none;
+        }
+
+        /* Mapa de Fases (Navegação entre os 5 desafios) */
+        .stage-map {
+            max-width: 1024px;
+            margin: 18px auto 0;
+            padding: 0 16px;
+            width: 100%;
+        }
+
+        .stages-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 22px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+            gap: 8px;
+            overflow-x: auto;
+        }
+
+        .stage-pill {
+            flex: 1;
+            min-width: 125px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border-radius: 16px;
+            border: 3px solid #E2E8F0;
+            background: #F8FAFC;
+            color: var(--text-muted);
+            font-family: 'Fredoka', sans-serif;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .stage-pill:hover {
+            transform: translateY(-2px);
+            border-color: var(--theme-primary);
+        }
+
+        .stage-pill.active {
+            background: var(--theme-primary);
+            border-color: var(--theme-shadow);
+            color: white;
+            box-shadow: 0 4px 0 var(--theme-shadow);
+            transform: translateY(-2px);
+        }
+
+        .stage-pill.completed {
+            background: #ECFDF5;
+            border-color: var(--c-green-solid);
+            color: var(--c-green-dark);
+        }
+
+        .stage-pill.completed.active {
+            background: var(--c-green-solid);
+            border-color: var(--c-green-dark);
+            color: white;
+        }
+
+        /* ==========================================================================
+           CONTAINER PRINCIPAL
+           ========================================================================== */
+        main {
+            flex: 1;
+            max-width: 960px;
+            width: 100%;
+            margin: 22px auto;
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen-card {
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 28px;
+            box-shadow: 0 12px 30px rgba(30, 41, 59, 0.08);
+            border: 4px solid var(--theme-primary);
+            animation: popIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.94) translateY(15px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* ==========================================================================
+           TELA INICIAL (BOAS-VINDAS)
+           ========================================================================== */
+        .welcome-hero {
+            text-align: center;
+            padding: 16px 8px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--c-yellow);
+            color: #78350F;
+            font-weight: 800;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 14px;
+            box-shadow: 0 3px 0 var(--c-yellow-dark);
+        }
+
+        .welcome-hero h2 {
+            font-size: 2.3rem;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .welcome-hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 28px;
+            line-height: 1.6;
+        }
+
+        .challenges-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .preview-mini-card {
+            background: #F8FAFC;
+            border: 3px solid #E2E8F0;
+            border-radius: 20px;
+            padding: 16px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .preview-mini-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--c-blue);
+            box-shadow: 0 8px 18px rgba(0, 187, 249, 0.15);
+        }
+
+        .preview-mini-card .emoji {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .preview-mini-card h4 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+
+        /* ==========================================================================
+           BOTÕES ESTILO ARCADE 3D
+           ========================================================================== */
+        .btn-arcade {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.25rem;
+            padding: 15px 32px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            background: var(--theme-primary);
+            box-shadow: 0 6px 0 var(--theme-shadow);
+            transition: all 0.15s ease;
+            text-decoration: none;
+        }
+
+        .btn-arcade:hover {
+            filter: brightness(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 var(--theme-shadow);
+        }
+
+        .btn-arcade:active {
+            transform: translateY(5px);
+            box-shadow: 0 1px 0 var(--theme-shadow);
+        }
+
+        .btn-green {
+            background: var(--c-green-solid);
+            box-shadow: 0 6px 0 var(--c-green-dark);
+        }
+        .btn-green:hover {
+            box-shadow: 0 8px 0 var(--c-green-dark);
+        }
+        .btn-green:active {
+            box-shadow: 0 1px 0 var(--c-green-dark);
+        }
+
+        .btn-orange {
+            background: var(--c-orange);
+            box-shadow: 0 6px 0 var(--c-orange-dark);
+        }
+
+        /* ==========================================================================
+           TELA "APRENDA PRIMEIRO!" (EXPLICAÇÃO PEDAGÓGICA)
+           ========================================================================== */
+        .lesson-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 3px dashed #E2E8F0;
+        }
+
+        .lesson-tag {
+            background: var(--theme-light);
+            color: var(--theme-shadow);
+            font-weight: 800;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lesson-title {
+            font-size: 1.9rem;
+            color: var(--text-dark);
+            margin-top: 6px;
+        }
+
+        .teacher-box {
+            background: var(--theme-light);
+            border-left: 6px solid var(--theme-primary);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 22px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .teacher-avatar {
+            font-size: 2.8rem;
+            background: white;
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        }
+
+        .teacher-content h3 {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .teacher-content p {
+            font-size: 1.08rem;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        .visual-board {
+            background: #F8FAFC;
+            border: 3px solid #E2E8F0;
+            border-radius: 22px;
+            padding: 22px;
+            margin-bottom: 26px;
+        }
+
+        .visual-board-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.15rem;
+            color: var(--theme-shadow);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lesson-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        /* ==========================================================================
+           ILUSTRAÇÕES VISUAIS DIDÁTICAS (FRAÇÕES, GEOMETRIA, LOJINHA, ETC.)
+           ========================================================================== */
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .example-item {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            border: 2px solid #E2E8F0;
+            text-align: center;
+        }
+
+        /* Barras de Fração Visuais */
+        .fraction-bar {
+            display: flex;
+            height: 36px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 3px solid #334155;
+            margin: 10px auto;
+            max-width: 240px;
+        }
+
+        .fraction-slice {
+            flex: 1;
+            border-right: 2px solid #334155;
+            transition: background 0.3s;
+        }
+
+        .fraction-slice:last-child {
+            border-right: none;
+        }
+
+        .fraction-slice.filled {
+            background: var(--c-pink);
+        }
+
+        .fraction-slice.empty {
+            background: #F1F5F9;
+        }
+
+        .math-fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.3rem;
+            vertical-align: middle;
+            margin: 0 6px;
+        }
+
+        .math-fraction .num {
+            border-bottom: 3px solid var(--text-dark);
+            padding: 0 6px;
+            line-height: 1.1;
+        }
+
+        .math-fraction .den {
+            padding: 0 6px;
+            line-height: 1.1;
+        }
+
+        /* Lojinha Decimal */
+        .shop-shelf {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .shop-item {
+            background: white;
+            border: 2px solid #FDE047;
+            border-radius: 16px;
+            padding: 12px 16px;
+            text-align: center;
+            min-width: 115px;
+            box-shadow: 0 4px 0 #FEF08A;
+        }
+
+        .shop-item .item-icon {
+            font-size: 2rem;
+            display: block;
+        }
+
+        .shop-item .price-tag {
+            display: inline-block;
+            background: #10B981;
+            color: white;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+
+        /* ==========================================================================
+           TELA DO QUIZ (PERGUNTAS INTERATIVAS)
+           ========================================================================== */
+        .quiz-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            gap: 12px;
+        }
+
+        .question-counter {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+            background: var(--theme-light);
+            color: var(--theme-shadow);
+            padding: 6px 16px;
+            border-radius: 50px;
+        }
+
+        .btn-back-lesson {
+            background: #F1F5F9;
+            border: 2px solid #CBD5E1;
+            color: var(--text-muted);
+            font-family: 'Fredoka', sans-serif;
+            font-size: 0.95rem;
+            padding: 6px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-back-lesson:hover {
+            background: #E2E8F0;
+            color: var(--text-dark);
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .q-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #E2E8F0;
+            transition: all 0.3s;
+        }
+
+        .q-dot.current {
+            background: var(--theme-primary);
+            transform: scale(1.25);
+        }
+
+        .q-dot.done {
+            background: var(--c-green-solid);
+        }
+
+        .question-box {
+            background: #F8FAFC;
+            border: 3px solid #E2E8F0;
+            border-radius: 22px;
+            padding: 22px;
+            margin-bottom: 22px;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        .question-visual {
+            margin: 16px auto 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Opções de Resposta */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .welcome-hero h2 {
+                font-size: 1.8rem;
+            }
+            .screen-card {
+                padding: 20px 16px;
+            }
+        }
+
+        .option-btn {
+            background: white;
+            border: 3px solid #CBD5E1;
+            border-radius: 18px;
+            padding: 16px 20px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 5px 0 #CBD5E1;
+            transition: all 0.15s ease;
+            text-align: left;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--theme-primary);
+            background: var(--theme-light);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 var(--theme-primary);
+        }
+
+        .option-btn:active:not(:disabled) {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 var(--theme-primary);
+        }
+
+        .option-letter {
+            background: var(--theme-primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        /* Estados de Acerto e Erro */
+        .option-btn.correct {
+            background: #ECFDF5 !important;
+            border-color: var(--c-green-solid) !important;
+            color: #065F46 !important;
+            box-shadow: 0 5px 0 var(--c-green-solid) !important;
+            animation: bounceSuccess 0.5s ease;
+        }
+
+        .option-btn.correct .option-letter {
+            background: var(--c-green-solid);
+        }
+
+        .option-btn.wrong {
+            background: #FEF2F2 !important;
+            border-color: var(--c-red) !important;
+            color: #991B1B !important;
+            box-shadow: 0 5px 0 var(--c-red) !important;
+            animation: shakeError 0.45s ease;
+        }
+
+        .option-btn.wrong .option-letter {
+            background: var(--c-red);
+        }
+
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+        }
+
+        @keyframes bounceSuccess {
+            0%, 100% { transform: scale(1); }
+            40% { transform: scale(1.04); }
+            70% { transform: scale(0.98); }
+        }
+
+        /* Caixa de Feedback Pedagógico */
+        .feedback-banner {
+            margin-top: 22px;
+            padding: 18px 22px;
+            border-radius: 20px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            animation: popIn 0.3s ease;
+        }
+
+        .feedback-banner.show {
+            display: flex;
+        }
+
+        .feedback-banner.success {
+            background: #ECFDF5;
+            border: 3px solid var(--c-green-solid);
+            color: #065F46;
+        }
+
+        .feedback-banner.error {
+            background: #FFFBEB;
+            border: 3px solid var(--c-orange);
+            color: #9A3412;
+        }
+
+        .feedback-text-area {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .feedback-text-area h4 {
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-text-area p {
+            font-size: 1.02rem;
+            line-height: 1.45;
+        }
+
+        /* ==========================================================================
+           TELA FINAL DE VITÓRIA (TROFÉU)
+           ========================================================================== */
+        .victory-screen {
+            text-align: center;
+            padding: 16px 8px;
+        }
+
+        .trophy-wrapper {
+            font-size: 5.5rem;
+            display: inline-block;
+            margin-bottom: 10px;
+            animation: floatTrophy 2.5s ease-in-out infinite;
+            filter: drop-shadow(0 10px 15px rgba(234, 179, 8, 0.35));
+        }
+
+        @keyframes floatTrophy {
+            0%, 100% { transform: translateY(0) rotate(-3deg); }
+            50% { transform: translateY(-14px) rotate(3deg); }
+        }
+
+        .medal-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FEE440, #FF6B35);
+            color: white;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.2rem;
+            padding: 10px 24px;
+            border-radius: 50px;
+            box-shadow: 0 5px 0 #D94E1F;
+            margin: 12px 0 20px;
+        }
+
+        .score-summary-box {
+            background: #F8FAFC;
+            border: 3px solid #E2E8F0;
+            border-radius: 22px;
+            padding: 20px;
+            max-width: 480px;
+            margin: 0 auto 26px;
+        }
+
+        .score-big {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.6rem;
+            color: #D97706;
+        }
+
+        /* ==========================================================================
+           RODAPÉ (FOOTER)
+           ========================================================================== */
+        footer {
+            background: white;
+            border-top: 4px solid var(--c-purple);
+            padding: 18px 16px;
+            text-align: center;
+            margin-top: auto;
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        .footer-content {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dev-credit {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            background: #F3E8FF;
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 2px solid #D8B4FE;
+        }
+
+        .footer-sub {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas para efeitos visuais comemorativos exclusivos de cada fase -->
+    <canvas id="effects-canvas"></canvas>
+
+    <!-- Cabeçalho com Pontuação e Controle de Áudio -->
+    <header>
+        <div class="header-container">
+            <div class="logo-area" onclick="goHome()" title="Voltar ao Início">
+                <div class="logo-badge">🧮</div>
+                <div class="logo-text">
+                    <h1>Matemática Divertida</h1>
+                    <span>Aventura do 5º Ano</span>
+                </div>
+            </div>
+
+            <div class="hud-controls">
+                <div class="stars-counter" title="Suas Estrelas Conquistadas">
+                    <span class="star-icon">⭐</span>
+                    <span id="total-stars">0</span> / 15
+                </div>
+                <button class="sound-btn" id="sound-toggle" onclick="toggleSound()" title="Ativar/Desativar Som">
+                    🔊
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mapa de Navegação dos 5 Desafios -->
+    <nav class="stage-map" aria-label="Mapa dos Desafios">
+        <div class="stages-bar" id="stages-bar">
+            <!-- Preenchido via JavaScript -->
+        </div>
+    </nav>
+
+    <!-- Área Principal Dinâmica -->
+    <main id="app-container">
+        <!-- O conteúdo das telas (Início, Aprenda Primeiro, Desafio e Vitória) será renderizado aqui -->
+    </main>
+
+    <!-- Rodapé Obrigatório -->
+    <footer>
+        <div class="footer-content">
+            <div class="dev-credit">Desenvolvido por Ingrid Vitoria Da Silva Becate</div>
+            <span class="footer-sub">Plataforma Educativa Interativa • Matemática 5º Ano do Ensino Fundamental</span>
+        </div>
+    </footer>
+
+    <script>
+        /* ==========================================================================
+           SISTEMA DE EFEITOS SONOROS SINTETIZADOS (WEB AUDIO API - SEM ARQUIVOS EXTERNOS)
+           ========================================================================== */
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('sound-toggle').textContent = soundEnabled ? '🔊' : '🔇';
+            if (soundEnabled) {
+                initAudio();
+                playTone(523.25, 'sine', 0.12);
+            }
+        }
+
+        function playTone(freq, type = 'sine', duration = 0.2, delay = 0) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+
+                gain.gain.setValueAtTime(0.18, audioCtx.currentTime + delay);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(audioCtx.currentTime + delay);
+                osc.stop(audioCtx.currentTime + delay + duration);
+            } catch (e) {
+                // Ignora bloqueios de áudio automáticos caso ocorram
+            }
+        }
+
+        function playSuccessSound() {
+            // Arpejo alegre de vitória
+            playTone(523.25, 'triangle', 0.18, 0);     // Dó
+            playTone(659.25, 'triangle', 0.18, 0.09);  // Mi
+            playTone(783.99, 'triangle', 0.18, 0.18);  // Sol
+            playTone(1046.50, 'triangle', 0.35, 0.27); // Dó agudo
+        }
+
+        function playErrorSound() {
+            // Som suave de "tente novamente"
+            playTone(300, 'sawtooth', 0.18, 0);
+            playTone(240, 'sawtooth', 0.25, 0.14);
+        }
+
+        function playVictoryFanfare() {
+            const notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5];
+            const times = [0, 0.12, 0.24, 0.36, 0.52, 0.66];
+            notes.forEach((n, i) => playTone(n, 'triangle', 0.28, times[i]));
+        }
+
+        /* ==========================================================================
+           SISTEMA DE EFEITOS VISUAIS ESPECÍFICOS PARA CADA DESAFIO (CANVAS 2D)
+           ========================================================================== */
+        const canvas = document.getElementById('effects-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animFrameId = null;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        /**
+         * Dispara o efeito visual exclusivo de cada um dos 5 desafios!
+         * 1: Chuva de estrelas douradas
+         * 2: Confetes coloridos de festa
+         * 3: Chuva de moedas e brilhos
+         * 4: Formas geométricas neon flutuantes
+         * 5: Foguetes e bolhas subindo
+         */
+        function triggerChallengeEffect(challengeId) {
+            const count = 55;
+            for (let i = 0; i < count; i++) {
+                const x = Math.random() * canvas.width;
+                const isUpward = (challengeId === 5);
+                const y = isUpward ? canvas.height + Math.random() * 100 : -20 - Math.random() * 150;
+
+                particles.push({
+                    type: challengeId,
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: isUpward ? -(3 + Math.random() * 5) : (2.5 + Math.random() * 4.5),
+                    size: 12 + Math.random() * 14,
+                    rotation: Math.random() * Math.PI * 2,
+                    vRot: (Math.random() - 0.5) * 0.15,
+                    color: ['#00BBF9', '#FEE440', '#FF6B35', '#00F5D4', '#9B5DE5', '#F15BB5'][Math.floor(Math.random() * 6)],
+                    shape: ['square', 'circle', 'triangle'][Math.floor(Math.random() * 3)],
+                    alpha: 1,
+                    life: 140 + Math.random() * 60
+                });
+            }
+
+            if (!animFrameId) {
+                animateParticles();
+            }
+        }
+
+        function drawStar(cx, cy, spikes, outerRadius, innerRadius, color) {
+            let rot = Math.PI / 2 * 3;
+            let x = cx;
+            let y = cy;
+            let step = Math.PI / spikes;
+
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - outerRadius);
+            for (let i = 0; i < spikes; i++) {
+                x = cx + Math.cos(rot) * outerRadius;
+                y = cy + Math.sin(rot) * outerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+
+                x = cx + Math.cos(rot) * innerRadius;
+                y = cy + Math.sin(rot) * innerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+            }
+            ctx.lineTo(cx, cy - outerRadius);
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.rotation += p.vRot;
+                p.life--;
+
+                if (p.life < 30) {
+                    p.alpha = Math.max(0, p.life / 30);
+                }
+
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation);
+
+                if (p.type === 1) {
+                    // Desafio 1: Estrelas Douradas
+                    drawStar(0, 0, 5, p.size * 0.7, p.size * 0.35, '#FACC15');
+                } else if (p.type === 2) {
+                    // Desafio 2: Confetes Coloridos
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+                } else if (p.type === 3) {
+                    // Desafio 3: Moedas Douradas (R$)
+                    ctx.beginPath();
+                    ctx.arc(0, 0, p.size * 0.65, 0, Math.PI * 2);
+                    ctx.fillStyle = '#FBBF24';
+                    ctx.fill();
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#B45309';
+                    ctx.stroke();
+                    ctx.fillStyle = '#78350F';
+                    ctx.font = `bold ${Math.floor(p.size * 0.7)}px Fredoka, sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('$', 0, 1);
+                } else if (p.type === 4) {
+                    // Desafio 4: Formas Geométricas Neon
+                    ctx.strokeStyle = p.color;
+                    ctx.lineWidth = 3.5;
+                    ctx.fillStyle = p.color + '44';
+                    if (p.shape === 'square') {
+                        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                        ctx.strokeRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    } else if (p.shape === 'circle') {
+                        ctx.beginPath();
+                        ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.stroke();
+                    } else {
+                        ctx.beginPath();
+                        ctx.moveTo(0, -p.size / 1.5);
+                        ctx.lineTo(p.size / 1.5, p.size / 2);
+                        ctx.lineTo(-p.size / 1.5, p.size / 2);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.stroke();
+                    }
+                } else if (p.type === 5) {
+                    // Desafio 5: Foguetes e Bolhas subindo
+                    ctx.font = `${Math.floor(p.size * 1.3)}px sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(i % 3 === 0 ? '🚀' : '🫧', 0, 0);
+                }
+
+                ctx.restore();
+
+                if (p.life <= 0 || p.y > canvas.height + 100 || p.y < -150) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            if (particles.length > 0) {
+                animFrameId = requestAnimationFrame(animateParticles);
+            } else {
+                animFrameId = null;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        /* ==========================================================================
+           BANCO DE DADOS PEDAGÓGICO: OS 5 DESAFIOS DO 5º ANO
+           ========================================================================== */
+        const CHALLENGES = [
+            {
+                id: 1,
+                shortTitle: "1. Operações",
+                title: "As Quatro Operações: Multiplicação e Divisão",
+                icon: "✖️",
+                effectName: "Chuva de Estrelas Douradas ⭐",
+                theme: { primary: "#00BBF9", shadow: "#0096C7", light: "#E0F7FF" },
+                lesson: {
+                    intro: "No 5º ano, usamos a <strong>multiplicação</strong> para somar grupos iguais rapidamente e a <strong>divisão</strong> para repartir em partes iguais!",
+                    visualTitle: "Veja como funciona na prática:",
+                    visualHTML: `
+                        <div class="examples-grid">
+                            <div class="example-item">
+                                <div style="font-size: 1.8rem; margin-bottom: 6px;">🍎🍎🍎 &nbsp; 🍎🍎🍎 &nbsp; 🍎🍎🍎</div>
+                                <strong>Multiplicação (Juntar grupos)</strong>
+                                <p style="margin-top:6px; color:#475569;">3 cestas com 3 maçãs cada:<br><strong>3 × 3 = 9 maçãs</strong></p>
+                            </div>
+                            <div class="example-item">
+                                <div style="font-size: 1.8rem; margin-bottom: 6px;">🎈🎈🎈🎈 ➗ 👦👧</div>
+                                <strong>Divisão (Repartir igual)</strong>
+                                <p style="margin-top:6px; color:#475569;">12 balões divididos para 2 crianças:<br><strong>12 ÷ 2 = 6 balões para cada</strong></p>
+                            </div>
+                        </div>
+                    `
+                },
+                questions: [
+                    {
+                        text: "Uma escola organizou 6 ônibus para um passeio ao zoológico. Em cada ônibus cabem 35 alunos. Quantos alunos vão ao passeio no total?",
+                        visual: `<div style="font-size:2rem;">🚌 × 6 &nbsp; (35 alunos em cada)</div>`,
+                        options: ["180 alunos", "210 alunos", "205 alunos", "195 alunos"],
+                        correctIndex: 1,
+                        hint: "Multiplique 35 por 6! Dica: 6 × 30 = 180 e 6 × 5 = 30. Depois some 180 + 30!"
+                    },
+                    {
+                        text: "A professora Ana tem 96 lápis de cor e quer dividir igualmente entre 8 grupos de alunos. Quantos lápis cada grupo vai receber?",
+                        visual: `<div style="font-size:2rem;">🖍️ 96 lápis ÷ 8 grupos</div>`,
+                        options: ["10 lápis", "14 lápis", "12 lápis", "16 lápis"],
+                        correctIndex: 2,
+                        hint: "Pense: qual número multiplicado por 8 dá 96? Lembre-se que 8 × 10 = 80, e faltam 16 (que é 8 × 2)!"
+                    },
+                    {
+                        text: "Lucas coleciona figurinhas. Ele comprou 14 pacotes com 5 figurinhas em cada um, e depois ganhou mais 12 figurinhas de seu primo. Com quantas figurinhas Lucas ficou?",
+                        visual: `<div style="font-size:2rem;">📦 14 × 5 + 12 🎁</div>`,
+                        options: ["82 figurinhas", "70 figurinhas", "62 figurinhas", "92 figurinhas"],
+                        correctIndex: 0,
+                        hint: "Faça em duas etapas: primeiro calcule 14 × 5 = 70. Depois some as 12 figurinhas que ele ganhou!"
+                    }
+                ]
+            },
+            {
+                id: 2,
+                shortTitle: "2. Frações",
+                title: "O Mundo das Frações",
+                icon: "🍕",
+                effectName: "Explosão de Confetes Coloridos 🎉",
+                theme: { primary: "#9B5DE5", shadow: "#7C3AED", light: "#F3E8FF" },
+                lesson: {
+                    intro: "A <strong>fração</strong> representa partes de um inteiro dividido em pedaços iguais. O número de cima é o <strong>Numerador</strong> (partes pintadas) e o de baixo é o <strong>Denominador</strong> (total de pedaços).",
+                    visualTitle: "Observe as barras de chocolate abaixo:",
+                    visualHTML: `
+                        <div class="examples-grid">
+                            <div class="example-item">
+                                <strong>Barra dividida em 4 partes (3 comidas):</strong>
+                                <div class="fraction-bar">
+                                    <div class="fraction-slice filled"></div>
+                                    <div class="fraction-slice filled"></div>
+                                    <div class="fraction-slice filled"></div>
+                                    <div class="fraction-slice empty"></div>
+                                </div>
+                                <div>Lemos: <strong>Três quartos</strong> = 
+                                    <span class="math-fraction"><span class="num">3</span><span class="den">4</span></span>
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <strong>Frações Equivalentes (Mesmo tamanho!):</strong>
+                                <div class="fraction-bar">
+                                    <div class="fraction-slice filled"></div>
+                                    <div class="fraction-slice empty"></div>
+                                </div>
+                                <div>
+                                    <span class="math-fraction"><span class="num">1</span><span class="den">2</span></span>
+                                    é igual a 
+                                    <span class="math-fraction"><span class="num">2</span><span class="den">4</span></span>
+                                    (metade!)
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                questions: [
+                    {
+                        text: "Observe a barra colorida abaixo. Qual fração representa a parte PINTADA de rosa?",
+                        visual: `
+                            <div style="width: 280px;">
+                                <div class="fraction-bar" style="height:44px;">
+                                    <div class="fraction-slice filled"></div>
+                                    <div class="fraction-slice filled"></div>
+                                    <div class="fraction-slice empty"></div>
+                                    <div class="fraction-slice empty"></div>
+                                    <div class="fraction-slice empty"></div>
+                                </div>
+                            </div>
+                        `,
+                        options: ["2/3 (dois terços)", "2/5 (dois quintos)", "3/5 (três quintos)", "5/2 (cinco meios)"],
+                        correctIndex: 1,
+                        hint: "Conte o total de quadradinhos (5) para colocar embaixo, e conte quantos estão pintados de rosa (2) para colocar em cima!"
+                    },
+                    {
+                        text: "Júlia pediu uma pizza dividida em 8 fatias iguais e comeu 4 fatias. Isso significa que Júlia comeu:",
+                        visual: `<div style="font-size:2.2rem;">🍕 4 fatias de 8</div>`,
+                        options: ["Um terço da pizza", "A pizza inteira", "Metade da pizza (1/2)", "Um quarto da pizza"],
+                        correctIndex: 2,
+                        hint: "4 é exatamente a metade de 8! Portanto, 4/8 é equivalente a 1/2 (metade)."
+                    },
+                    {
+                        text: "Qual das frações abaixo é equivalente à fração 1/3 (um terço)?",
+                        visual: `
+                            <div style="width: 240px;">
+                                <div class="fraction-bar">
+                                    <div class="fraction-slice filled"></div>
+                                    <div class="fraction-slice empty"></div>
+                                    <div class="fraction-slice empty"></div>
+                                </div>
+                            </div>
+                        `,
+                        options: ["2/6 (dois sextos)", "2/3 (dois terços)", "1/6 (um sexto)", "3/4 (três quartos)"],
+                        correctIndex: 0,
+                        hint: "Para achar uma fração equivalente, multiplique o número de cima e o de baixo pelo mesmo número: 1×2 = 2 e 3×2 = 6!"
+                    }
+                ]
+            },
+            {
+                id: 3,
+                shortTitle: "3. Decimais e R$",
+                title: "Números Decimais e Dinheiro (R$)",
+                icon: "💰",
+                effectName: "Chuva de Moedas Douradas 🪙",
+                theme: { primary: "#FF6B35", shadow: "#D94E1F", light: "#FFF1EB" },
+                lesson: {
+                    intro: "Usamos números decimais todos os dias no nosso dinheiro (Reais e Centavos)! A regra de ouro para somar ou subtrair é sempre colocar <strong>vírgula embaixo de vírgula</strong>.",
+                    visualTitle: "Bem-vindo à Lojinha da Escola:",
+                    visualHTML: `
+                        <div class="shop-shelf">
+                            <div class="shop-item">
+                                <span class="item-icon">📓</span>
+                                <strong>Caderno</strong><br>
+                                <span class="price-tag">R$ 12,50</span>
+                            </div>
+                            <div class="shop-item">
+                                <span class="item-icon">✏️</span>
+                                <strong>Lápis</strong><br>
+                                <span class="price-tag">R$ 2,25</span>
+                            </div>
+                            <div class="shop-item">
+                                <span class="item-icon">🧃</span>
+                                <strong>Suco</strong><br>
+                                <span class="price-tag">R$ 4,50</span>
+                            </div>
+                        </div>
+                        <p style="text-align:center; margin-top:14px; color:#334155;">
+                            💡 Exemplo: Caderno (<strong>12,50</strong>) + Lápis (<strong>2,25</strong>) = <strong>R$ 14,75</strong>
+                        </p>
+                    `
+                },
+                questions: [
+                    {
+                        text: "Na lojinha, Pedro comprou um caderno de R$ 12,50 e um suco de R$ 4,50. Quanto ele gastou no total?",
+                        visual: `<div style="font-size:1.8rem;">📓 R$ 12,50 + 🧃 R$ 4,50</div>`,
+                        options: ["R$ 16,00", "R$ 17,50", "R$ 17,00", "R$ 16,50"],
+                        correctIndex: 2,
+                        hint: "Some os reais: 12 + 4 = 16. Depois some os centavos: 50 + 50 = 100 centavos (que vale R$ 1,00). 16 + 1 = R$ 17,00!"
+                    },
+                    {
+                        text: "Sofia comprou um lanche que custou R$ 13,40 e pagou com uma nota de R$ 20,00. Quanto ela recebeu de troco?",
+                        visual: `<div style="font-size:1.8rem;">💵 R$ 20,00 − 🥪 R$ 13,40</div>`,
+                        options: ["R$ 6,60", "R$ 7,40", "R$ 7,60", "R$ 6,40"],
+                        correctIndex: 0,
+                        hint: "De R$ 13,40 para chegar em R$ 14,00 faltam R$ 0,60. De R$ 14,00 para R$ 20,00 faltam R$ 6,00. Juntando: R$ 6,60!"
+                    },
+                    {
+                        text: "Qual número decimal representa 'cinco inteiros e vinte e cinco centésimos'?",
+                        visual: `<div style="font-size:1.8rem;">🔢 Parte inteira , centésimos</div>`,
+                        options: ["5,025", "52,5", "5,25", "0,525"],
+                        correctIndex: 2,
+                        hint: "Os inteiros ficam antes da vírgula (5) e os centésimos ocupam duas casas depois da vírgula (25) -> 5,25!"
+                    }
+                ]
+            },
+            {
+                id: 4,
+                shortTitle: "4. Geometria",
+                title: "Geometria: Perímetro e Área",
+                icon: "📐",
+                effectName: "Formas Geométricas Neon 🔷",
+                theme: { primary: "#10B981", shadow: "#059669", light: "#ECFDF5" },
+                lesson: {
+                    intro: "Não confunda Perímetro com Área! <strong>Perímetro</strong> é a soma de todos os lados (o contorno/cerca). <strong>Área</strong> é o espaço de dentro (multiplicamos Base × Altura).",
+                    visualTitle: "Compare a diferença visual:",
+                    visualHTML: `
+                        <div class="examples-grid">
+                            <div class="example-item">
+                                <svg width="140" height="90" viewBox="0 0 140 90">
+                                    <rect x="20" y="15" width="100" height="60" fill="#F8FAFC" stroke="#FF6B35" stroke-width="5" stroke-dasharray="6,3"/>
+                                    <text x="70" y="11" font-size="11" text-anchor="middle" font-weight="bold" fill="#1E293B">5 m</text>
+                                    <text x="128" y="48" font-size="11" text-anchor="start" font-weight="bold" fill="#1E293B">3 m</text>
+                                </svg>
+                                <div><strong>PERÍMETRO (Contorno)</strong><br>5 + 3 + 5 + 3 = <strong>16 m</strong></div>
+                            </div>
+                            <div class="example-item">
+                                <svg width="140" height="90" viewBox="0 0 140 90">
+                                    <rect x="20" y="15" width="100" height="60" fill="#6EE7B7" stroke="#059669" stroke-width="3"/>
+                                    <text x="70" y="48" font-size="12" text-anchor="middle" font-weight="bold" fill="#065F46">5 × 3 = 15 m²</text>
+                                </svg>
+                                <div><strong>ÁREA (Dentro)</strong><br>Base × Altura = <strong>15 m²</strong></div>
+                            </div>
+                        </div>
+                    `
+                },
+                questions: [
+                    {
+                        text: "Um campo de futebol retangular tem 10 metros de comprimento e 6 metros de largura. Qual é o PERÍMETRO (contorno total) desse campo?",
+                        visual: `
+                            <svg width="200" height="110" viewBox="0 0 200 110">
+                                <rect x="30" y="20" width="140" height="70" rx="6" fill="#D1FAE5" stroke="#059669" stroke-width="4"/>
+                                <text x="100" y="14" font-size="13" text-anchor="middle" font-weight="bold" fill="#1E293B">10 m</text>
+                                <text x="100" y="106" font-size="13" text-anchor="middle" font-weight="bold" fill="#1E293B">10 m</text>
+                                <text x="15" y="60" font-size="13" text-anchor="middle" font-weight="bold" fill="#1E293B">6 m</text>
+                                <text x="185" y="60" font-size="13" text-anchor="middle" font-weight="bold" fill="#1E293B">6 m</text>
+                            </svg>
+                        `,
+                        options: ["60 metros", "16 metros", "32 metros", "26 metros"],
+                        correctIndex: 2,
+                        hint: "Perímetro é a soma dos 4 lados! Some: 10 + 6 + 10 + 6 = 32 metros."
+                    },
+                    {
+                        text: "Qual é a ÁREA de um quarto quadrado em que cada lado mede 4 metros?",
+                        visual: `
+                            <svg width="150" height="120" viewBox="0 0 150 120">
+                                <rect x="35" y="20" width="80" height="80" rx="6" fill="#A7F3D0" stroke="#059669" stroke-width="4"/>
+                                <text x="75" y="14" font-size="13" text-anchor="middle" font-weight="bold" fill="#1E293B">4 m</text>
+                                <text x="128" y="65" font-size="13" text-anchor="middle" font-weight="bold" fill="#1E293B">4 m</text>
+                            </svg>
+                        `,
+                        options: ["8 m²", "16 m²", "12 m²", "20 m²"],
+                        correctIndex: 1,
+                        hint: "Para calcular a área do quadrado, multiplique lado × lado: 4 × 4 = 16 m²!"
+                    },
+                    {
+                        text: "Um tapete retangular tem 7 metros de base e 3 metros de altura. Qual é a ÁREA desse tapete?",
+                        visual: `
+                            <svg width="200" height="100" viewBox="0 0 200 100">
+                                <rect x="30" y="20" width="140" height="60" rx="6" fill="#FDE68A" stroke="#D97706" stroke-width="4"/>
+                                <text x="100" y="55" font-size="14" text-anchor="middle" font-weight="bold" fill="#92400E">Base: 7 m | Altura: 3 m</text>
+                            </svg>
+                        `,
+                        options: ["21 m²", "10 m²", "20 m²", "24 m²"],
+                        correctIndex: 0,
+                        hint: "Área do retângulo = Base × Altura. Multiplique 7 × 3 = 21 m²!"
+                    }
+                ]
+            },
+            {
+                id: 5,
+                shortTitle: "5. Medidas",
+                title: "Medidas de Tempo e Grandezas",
+                icon: "⏰",
+                effectName: "Foguetes e Bolhas Espaciais 🚀",
+                theme: { primary: "#F15BB5", shadow: "#DB2777", light: "#FCE7F3" },
+                lesson: {
+                    intro: "Medir faz parte da nossa rotina! Veja as três conversões mais importantes do 5º ano para nunca mais esquecer:",
+                    visualTitle: "Tabela Mágica de Conversões:",
+                    visualHTML: `
+                        <div class="examples-grid">
+                            <div class="example-item">
+                                <div style="font-size:2rem;">⏰</div>
+                                <strong>TEMPO</strong>
+                                <p style="margin-top:4px;">1 hora = <strong>60 minutos</strong><br>Meia hora = <strong>30 minutos</strong></p>
+                            </div>
+                            <div class="example-item">
+                                <div style="font-size:2rem;">📏</div>
+                                <strong>COMPRIMENTO</strong>
+                                <p style="margin-top:4px;">1 quilômetro (km) = <strong>1.000 metros (m)</strong></p>
+                            </div>
+                            <div class="example-item">
+                                <div style="font-size:2rem;">🧃</div>
+                                <strong>CAPACIDADE</strong>
+                                <p style="margin-top:4px;">1 litro (L) = <strong>1.000 mililitros (ml)</strong></p>
+                            </div>
+                        </div>
+                    `
+                },
+                questions: [
+                    {
+                        text: "Um filme infantil tem duração de 2 horas e 15 minutos. Quantos MINUTOS esse filme tem ao todo?",
+                        visual: `<div style="font-size:2rem;">🎬 2 horas + 15 minutos</div>`,
+                        options: ["120 minutos", "135 minutos", "215 minutos", "95 minutos"],
+                        correctIndex: 1,
+                        hint: "Cada hora tem 60 minutos. Então 2 horas = 60 + 60 = 120 minutos. Agora some mais 15 minutos!"
+                    },
+                    {
+                        text: "Mateus caminhou 3 quilômetros (km) no parque. Quantos METROS (m) Mateus caminhou?",
+                        visual: `<div style="font-size:2rem;">🏃‍♂️ 3 km = ? metros</div>`,
+                        options: ["300 metros", "30 metros", "3.000 metros", "30.000 metros"],
+                        correctIndex: 2,
+                        hint: "Lembre-se que 1 km vale 1.000 metros. Multiplicando 3 × 1.000, temos 3.000 metros!"
+                    },
+                    {
+                        text: "Uma jarra tem 2 litros de suco de laranja. Quantos copos de 500 ml (meio litro) podemos encher com essa jarra?",
+                        visual: `<div style="font-size:2rem;">🫗 2 Litros (2.000 ml) ÷ 🥛 500 ml</div>`,
+                        options: ["2 copos", "3 copos", "5 copos", "4 copos"],
+                        correctIndex: 3,
+                        hint: "2 litros = 2.000 ml. Como dois copos de 500 ml formam 1 litro (1.000 ml), para 2 litros precisamos de 4 copos!"
+                    }
+                ]
+            }
+        ];
+
+        /* ==========================================================================
+           ESTADO DO JOGO E CONTROLE DE TELAS
+           ========================================================================== */
+        let state = {
+            currentView: 'home', // 'home' | 'lesson' | 'quiz' | 'victory'
+            challengeIdx: 0,
+            questionIdx: 0,
+            // Guarda quais perguntas já foram acertadas (ex: "0-1" -> desafio 0, pergunta 1)
+            answeredCorrectly: new Set(),
+            completedChallenges: new Set(),
+            questionLocked: false
+        };
+
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            root.style.setProperty('--theme-primary', theme.primary);
+            root.style.setProperty('--theme-shadow', theme.shadow);
+            root.style.setProperty('--theme-light', theme.light);
+        }
+
+        function updateHUD() {
+            document.getElementById('total-stars').textContent = state.answeredCorrectly.size;
+            renderStagesBar();
+        }
+
+        function renderStagesBar() {
+            const bar = document.getElementById('stages-bar');
+            bar.innerHTML = CHALLENGES.map((ch, idx) => {
+                const isActive = (state.currentView === 'lesson' || state.currentView === 'quiz') && state.challengeIdx === idx;
+                const isDone = state.completedChallenges.has(idx);
+                return `
+                    <button class="stage-pill ${isActive ? 'active' : ''} ${isDone ? 'completed' : ''}" 
+                            onclick="selectChallenge(${idx})">
+                        <span>${isDone ? '✅' : ch.icon}</span>
+                        <span>${ch.shortTitle}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function goHome() {
+            state.currentView = 'home';
+            applyTheme({ primary: "#00BBF9", shadow: "#0096C7", light: "#E0F7FF" });
+            render();
+        }
+
+        function selectChallenge(idx) {
+            state.challengeIdx = idx;
+            state.questionIdx = 0;
+            state.currentView = 'lesson';
+            state.questionLocked = false;
+            applyTheme(CHALLENGES[idx].theme);
+            playTone(440, 'sine', 0.1);
+            render();
+        }
+
+        function startQuiz() {
+            state.currentView = 'quiz';
+            state.questionIdx = 0;
+            state.questionLocked = false;
+            playTone(587.33, 'triangle', 0.15);
+            render();
+        }
+
+        function resetGame() {
+            state.answeredCorrectly.clear();
+            state.completedChallenges.clear();
+            state.challengeIdx = 0;
+            state.questionIdx = 0;
+            state.currentView = 'home';
+            applyTheme({ primary: "#00BBF9", shadow: "#0096C7", light: "#E0F7FF" });
+            render();
+        }
+
+        /* ==========================================================================
+           RENDERIZAÇÃO DAS TELAS
+           ========================================================================== */
+        function render() {
+            updateHUD();
+            const container = document.getElementById('app-container');
+
+            if (state.currentView === 'home') {
+                container.innerHTML = renderHomeScreen();
+            } else if (state.currentView === 'lesson') {
+                container.innerHTML = renderLessonScreen();
+            } else if (state.currentView === 'quiz') {
+                container.innerHTML = renderQuizScreen();
+            } else if (state.currentView === 'victory') {
+                container.innerHTML = renderVictoryScreen();
+            }
+        }
+
+        function renderHomeScreen() {
+            const cardsHTML = CHALLENGES.map((ch, idx) => `
+                <div class="preview-mini-card" onclick="selectChallenge(${idx})">
+                    <span class="emoji">${ch.icon}</span>
+                    <h4>${ch.shortTitle}</h4>
+                    <small style="color:#64748B; font-weight:700;">3 perguntas ⭐</small>
+                </div>
+            `).join('');
+
+            return `
+                <section class="screen-card welcome-hero">
+                    <div class="hero-badge">🎓 Ensino Fundamental • 5º Ano</div>
+                    <h2>Aprenda Matemática Brincando e Conquiste Estrelas! 🚀</h2>
+                    <p>
+                        Explore os <strong>5 desafios interativos</strong>! Antes de cada desafio, você recebe uma super dica visual do professor e desbloqueia efeitos especiais a cada resposta certa.
+                    </p>
+
+                    <div class="challenges-preview-grid">
+                        ${cardsHTML}
+                    </div>
+
+                    <button class="btn-arcade btn-green" onclick="selectChallenge(0)">
+                        <span>▶️</span> Começar Aventura!
+                    </button>
+                </section>
+            `;
+        }
+
+        function renderLessonScreen() {
+            const ch = CHALLENGES[state.challengeIdx];
+            return `
+                <section class="screen-card">
+                    <div class="lesson-header">
+                        <div>
+                            <span class="lesson-tag">📚 Aprenda Primeiro! • Fase ${ch.id} de 5</span>
+                            <h2 class="lesson-title">${ch.icon} ${ch.title}</h2>
+                        </div>
+                        <span class="lesson-tag" style="background:#FFFBEB; color:#B45309;">
+                            ✨ Efeito: ${ch.effectName}
+                        </span>
+                    </div>
+
+                    <div class="teacher-box">
+                        <div class="teacher-avatar">👩‍🏫</div>
+                        <div class="teacher-content">
+                            <h3>Dica da Professora:</h3>
+                            <p>${ch.lesson.intro}</p>
+                        </div>
+                    </div>
+
+                    <div class="visual-board">
+                        <div class="visual-board-title">💡 ${ch.lesson.visualTitle}</div>
+                        ${ch.lesson.visualHTML}
+                    </div>
+
+                    <div class="lesson-actions">
+                        <button class="btn-arcade" onclick="startQuiz()">
+                            <span>🎯</span> Ir para o Desafio!
+                        </button>
+                    </div>
+                </section>
+            `;
+        }
+
+        function renderQuizScreen() {
+            const ch = CHALLENGES[state.challengeIdx];
+            const q = ch.questions[state.questionIdx];
+            const letters = ['A', 'B', 'C', 'D'];
+
+            const dotsHTML = ch.questions.map((_, i) => {
+                const isDone = state.answeredCorrectly.has(`${state.challengeIdx}-${i}`);
+                const isCurrent = i === state.questionIdx;
+                return `<div class="q-dot ${isCurrent ? 'current' : ''} ${isDone ? 'done' : ''}"></div>`;
+            }).join('');
+
+            const optionsHTML = q.options.map((opt, idx) => `
+                <button class="option-btn" id="opt-btn-${idx}" onclick="handleAnswer(${idx})">
+                    <span class="option-letter">${letters[idx]}</span>
+                    <span>${opt}</span>
+                </button>
+            `).join('');
+
+            return `
+                <section class="screen-card">
+                    <div class="quiz-top-bar">
+                        <button class="btn-back-lesson" onclick="selectChallenge(${state.challengeIdx})">
+                            📖 Rever Explicação
+                        </button>
+                        <div class="progress-dots" title="Progresso neste desafio">
+                            ${dotsHTML}
+                        </div>
+                        <div class="question-counter">
+                            Pergunta ${state.questionIdx + 1} de ${ch.questions.length}
+                        </div>
+                    </div>
+
+                    <div class="question-box">
+                        <p class="question-text">${q.text}</p>
+                        ${q.visual ? `<div class="question-visual">${q.visual}</div>` : ''}
+                    </div>
+
+                    <div class="options-grid">
+                        ${optionsHTML}
+                    </div>
+
+                    <div class="feedback-banner" id="feedback-banner">
+                        <div class="feedback-text-area">
+                            <h4 id="feedback-title"></h4>
+                            <p id="feedback-msg"></p>
+                        </div>
+                        <div id="feedback-action"></div>
+                    </div>
+                </section>
+            `;
+        }
+
+        function handleAnswer(selectedIdx) {
+            if (state.questionLocked) return;
+
+            const ch = CHALLENGES[state.challengeIdx];
+            const q = ch.questions[state.questionIdx];
+            const btn = document.getElementById(`opt-btn-${selectedIdx}`);
+            const banner = document.getElementById('feedback-banner');
+            const fTitle = document.getElementById('feedback-title');
+            const fMsg = document.getElementById('feedback-msg');
+            const fAction = document.getElementById('feedback-action');
+
+            // Limpa marcações anteriores de erro caso o aluno esteja tentando de novo
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('wrong'));
+
+            if (selectedIdx === q.correctIndex) {
+                // ACERTOU!
+                state.questionLocked = true;
+                btn.classList.add('correct');
+
+                // Trava todos os botões de opção
+                document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+                // Registra estrela
+                state.answeredCorrectly.add(`${state.challengeIdx}-${state.questionIdx}`);
+                updateHUD();
+
+                // Toca som e dispara efeito exclusivo do desafio!
+                playSuccessSound();
+                triggerChallengeEffect(ch.id);
+
+                banner.className = 'feedback-banner success show';
+                fTitle.innerHTML = '🌟 Parabéns! Você acertou!';
+                fMsg.innerHTML = 'Mandou muito bem! Você ganhou +1 estrela e ativou o efeito especial deste desafio!';
+
+                const isLastQuestion = state.questionIdx === ch.questions.length - 1;
+                const isLastChallenge = state.challengeIdx === CHALLENGES.length - 1;
+
+                if (!isLastQuestion) {
+                    fAction.innerHTML = `
+                        <button class="btn-arcade btn-green" onclick="nextQuestion()">
+                            Próxima Pergunta ➡️
+                        </button>
+                    `;
+                } else {
+                    state.completedChallenges.add(state.challengeIdx);
+                    updateHUD();
+                    if (!isLastChallenge) {
+                        fAction.innerHTML = `
+                            <button class="btn-arcade btn-green" onclick="nextChallenge()">
+                                Próximo Desafio 🚀
+                            </button>
+                        `;
+                    } else {
+                        fAction.innerHTML = `
+                            <button class="btn-arcade btn-orange" onclick="showVictory()">
+                                Ver Troféu Final 🏆
+                            </button>
+                        `;
+                    }
+                }
+            } else {
+                // ERROU!
+                btn.classList.add('wrong');
+                playErrorSound();
+
+                banner.className = 'feedback-banner error show';
+                fTitle.innerHTML = '🤔 Quase lá! Vamos pensar juntos:';
+                fMsg.innerHTML = q.hint;
+                fAction.innerHTML = `
+                    <button class="btn-arcade" style="font-size:1rem; padding:10px 18px;" onclick="retryQuestion()">
+                        🔄 Tentar Novamente
+                    </button>
+                `;
+            }
+        }
+
+        function retryQuestion() {
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('wrong'));
+            document.getElementById('feedback-banner').classList.remove('show');
+        }
+
+        function nextQuestion() {
+            state.questionIdx++;
+            state.questionLocked = false;
+            render();
+        }
+
+        function nextChallenge() {
+            state.challengeIdx++;
+            state.questionIdx = 0;
+            state.currentView = 'lesson';
+            state.questionLocked = false;
+            applyTheme(CHALLENGES[state.challengeIdx].theme);
+            render();
+        }
+
+        function showVictory() {
+            state.currentView = 'victory';
+            applyTheme({ primary: "#FEE440", shadow: "#EAB308", light: "#FFFBEB" });
+            playVictoryFanfare();
+            // Dispara uma grande festa com efeitos combinados
+            triggerChallengeEffect(1);
+            setTimeout(() => triggerChallengeEffect(2), 350);
+            setTimeout(() => triggerChallengeEffect(3), 700);
+            render();
+        }
+
+        function renderVictoryScreen() {
+            const totalStars = state.answeredCorrectly.size;
+            return `
+                <section class="screen-card victory-screen">
+                    <div class="trophy-wrapper">🏆</div>
+                    <h2>Missão Cumprida!</h2>
+                    <div class="medal-badge">🏅 Mestre da Matemática do 5º Ano</div>
+
+                    <div class="score-summary-box">
+                        <p style="font-size:1.1rem; color:#475569; margin-bottom:6px;">Sua pontuação total foi:</p>
+                        <div class="score-big">⭐ ${totalStars} de 15 Estrelas</div>
+                        <p style="margin-top:10px; color:#334155; font-weight:700;">
+                            Você explorou Multiplicação, Divisão, Frações, Números Decimais, Geometria e Medidas!
+                        </p>
+                    </div>
+
+                    <button class="btn-arcade btn-green" onclick="resetGame()">
+                        <span>🔄</span> Jogar Novamente
+                    </button>
+                </section>
+            `;
+        }
+
+        // Inicializa o aplicativo ao carregar a página
+        window.onload = function() {
+            render();
+        };
+    </script>
+</body>
+</html>
